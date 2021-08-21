@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {Dimensions, FlatList, ScrollView, StyleSheet, View} from 'react-native';
+import {
+  Dimensions,
+  FlatList,
+  ScrollView,
+  StyleSheet,
+  View,
+  ActivityIndicator,
+} from 'react-native';
 import {SliderBox} from 'react-native-image-slider-box';
 import List from '../components/List';
 import {
@@ -17,6 +24,9 @@ const Home = () => {
   const [popularTv, setPopularTv] = useState();
   const [familyMovies, setFamilyMovies] = useState();
   const [documentaryMovies, setDocumentaryMovies] = useState();
+  const [loaded, setLoaded] = useState(false);
+  const [error, setError] = useState(false);
+
   const getData = () => {
     return Promise.all([
       getUpcomingMovies(),
@@ -27,7 +37,6 @@ const Home = () => {
     ]);
   };
   useEffect(() => {
-      console.log("Calling get data")
     getData()
       .then(
         ([
@@ -37,7 +46,6 @@ const Home = () => {
           familyMoviesData,
           documentaryMoviesData,
         ]) => {
-            console.log(upcomingMoviesData);
           const moviesImagesArray = [];
           upcomingMoviesData.forEach(movie => {
             moviesImagesArray.push(
@@ -53,51 +61,60 @@ const Home = () => {
           setDocumentaryMovies(documentaryMoviesData);
         },
       )
-      .catch((err) => {
-        // setError(true);
-        console.log(err)
+      .catch(err => {
+        setError(true);
+        console.log(err);
+      })
+      .finally(() => {
+        setLoaded(true);
       });
   }, []);
 
   return (
     <React.Fragment>
-      <ScrollView>
-        {moviesImages && (
-          <View style={styles.sliderContainer}>
-            <SliderBox
-              images={moviesImages}
-              dotStyle={styles.sliderStyle}
-              sliderBoxHeight={dimensions.height / 1.5}
-              autoplay={true}
-              circleLoop={true}
-            />
-          </View>
-        )}
-        
-        {popularMovies && (
-          <View style={styles.carousel}>
-            <List title={'Popular Movies'} content={popularMovies} />
-          </View>
-        )}
-        
-        {popularTv && (
-          <View style={styles.carousel}>
-            <List title={'Popular TV Shows'} content={popularTv} />
-          </View>
-        )}
-        
-        {familyMovies && (
-          <View style={styles.carousel}>
-            <List title={'Family Movies'} content={familyMovies} />
-          </View>
-        )}
-        
-        {documentaryMovies && (
-          <View style={styles.carousel}>
-            <List title={'Documentary Movies'} content={documentaryMovies} />
-          </View>
-        )}
-      </ScrollView>
+      {!loaded && (
+        <ActivityIndicator style={styles.sliderContainer} size="large" />
+      )}
+      {error && <Error />}
+      {loaded && (
+        <ScrollView>
+          {moviesImages && (
+            <View style={styles.sliderContainer}>
+              <SliderBox
+                images={moviesImages}
+                dotStyle={styles.sliderStyle}
+                sliderBoxHeight={dimensions.height / 1.5}
+                autoplay={true}
+                circleLoop={true}
+              />
+            </View>
+          )}
+
+          {popularMovies && (
+            <View style={styles.carousel}>
+              <List title={'Popular Movies'} content={popularMovies} />
+            </View>
+          )}
+
+          {popularTv && (
+            <View style={styles.carousel}>
+              <List title={'Popular TV Shows'} content={popularTv} />
+            </View>
+          )}
+
+          {familyMovies && (
+            <View style={styles.carousel}>
+              <List title={'Family Movies'} content={familyMovies} />
+            </View>
+          )}
+
+          {documentaryMovies && (
+            <View style={styles.carousel}>
+              <List title={'Documentary Movies'} content={documentaryMovies} />
+            </View>
+          )}
+        </ScrollView>
+      )}
     </React.Fragment>
   );
 };
