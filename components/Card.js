@@ -1,12 +1,14 @@
 import React from 'react';
-import { TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { TouchableOpacity, StyleSheet, Image, Text } from 'react-native';
 
+const placeholderImage = require("../assets/images/placeholder")
 class Card extends React.PureComponent {
     render() {
         const { item } = this.props;
         return (
             <TouchableOpacity style={styles.container}>
-                <Image resizeMode="cover" style={styles.image} source={{uri: `https://image.tmdb.org/t/p/w500${item.poster_path}`}} />
+                <Image resizeMode="cover" style={styles.image} source={ item.poster_path ? {uri: `https://image.tmdb.org/t/p/w500${item.poster_path}`} : placeholderImage } />
+                {!item.poster_path && <Text style={styles.movieName}>{item.title}</Text>}
             </TouchableOpacity>
         );
     }
@@ -15,8 +17,16 @@ class Card extends React.PureComponent {
 const styles = StyleSheet.create({ 
     container: {
         padding: 5,
-        position: 'relative'
+        position: 'relative',
+        alignItems: "center",
+        height: 100
     },
+    movieName: {
+        position: "absolute",
+        width: 100,
+        top: 20,
+        textAlign: "center",
+    },  
     image: {
         height: 200,
         width: 120,
