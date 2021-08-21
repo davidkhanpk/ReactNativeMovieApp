@@ -22,18 +22,18 @@ class List extends PureComponent {
 
 const styles = StyleSheet.create({
     list: {
-        marginTop: 25
+      marginTop: 25,
     },
     text: {
-        fontSize: 20,
-        fontWeight: "bold",
-        paddingBottom: 20
-    }
-})
+      fontSize: 20,
+      fontWeight: 'bold',
+      paddingBottom: 20,
+    },
+  });
 
 const propTypes = {
     title: PropTypes.string,
-    content: PropTypes.object
+    content: PropTypes.array
 }
 List.propTypes = propTypes;
 

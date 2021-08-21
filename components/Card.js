@@ -2,7 +2,7 @@ import React from 'react';
 import { TouchableOpacity, StyleSheet, Image, Text } from 'react-native';
 import PropTypes from 'prop-types';
 
-const placeholderImage = require("../assets/images/placeholder")
+const placeholderImage = require("../assets/images/placeholder.png")
 class Card extends React.PureComponent {
     render() {
         const { item } = this.props;
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
         padding: 5,
         position: 'relative',
         alignItems: "center",
-        height: 100
+        height: 200
     },
     movieName: {
         position: "absolute",
